@@ -1,6 +1,5 @@
 // I'm working on it , to fix the problems .
 
-
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.6.0 <0.8.1;
 
@@ -46,24 +45,24 @@ contract TechInsurance {
     }
  
     function addProduct(uint _productId, string memory _productName, uint _price ) public {
-        Product memory newProduct;
-        productIndex[msg.sender] = Product(_productId, _productName, _price,true);
-        productIndex[productCounter++]= newProduct;
+         productIndex[msg.sender];
+         Product memory newProduct= Product(_productId, _productName, _price,true);
+         productIndex[productCounter++]= newProduct;
             
     }
     
     
     function changeFalse(uint _productIndex) public view  {
-        require(productIndex[_productIndex].offered == false, "the Product is offered");
-        require(msg.Product == productIndex[_productIndex].offered);
-        return false;
+        require(msg.sender == insOwner, "the Product is offered");
+         productIndex[_productIndex].offered = false;
+        
        
         
     }
     
     function changeTrue(uint _productIndex) public view  {
-        require(productIndex[_productIndex].offered != true, "the Product is not offered");
-        require(msg.Product != productIndex[_productIndex].offered);
+         require(msg.sender != insOwner, "the Product is not offered");
+         productIndex[_productIndex].offered = true;
 
     }
     
@@ -81,7 +80,7 @@ contract TechInsurance {
     
     function clientSelect(uint _productIndex) public payable {
         require(msg.address == productIndex[_productIndex].time,"check the time"
-        productIndex[_productIndex].isValid=true;
+        productIndex[_productIndex].isValid = bool;
     } 
     
 }
