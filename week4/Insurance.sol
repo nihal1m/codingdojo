@@ -1,20 +1,11 @@
-// I'm working on it , to fix the problems .
-
 //SPDX-License-Identifier: MIT
-pragma solidity >=0.6.0 <0.8.1;
+pragma solidity ^0.8.0;
 
-/**
- * @title Tech Insurance tor
- * @dev 
- * Step1: Complete the functions in the insurance smart contract
- * Step2:Add any required methods that are needed to check if the function are called correctly, 
- * and also add a modifier function that allows only the owner can run the changePrice function.
- * Step3: Add any error handling that may occur in any function
- * Step 4: add ERC 721 Token
- * 
- */
-contract TechInsurance {
-    
+ 
+import "../github/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
+contract TechInsurance is ERC721 {
+
+  
     /** 
      * Defined two structs
      * 
@@ -25,13 +16,16 @@ contract TechInsurance {
         string productName;
         uint price;
         bool offered;
-        uint newPrice;
     }
      
     struct Client {
         bool isValid;
         uint time;
+
     }
+    
+
+
     
     
     mapping(uint => Product) public productIndex;
@@ -40,47 +34,57 @@ contract TechInsurance {
     uint productCounter;
     
     address payable insOwner;
-    constructor(address payable _insOwner) public{
-        insOwner = _insOwner;
-    }
+    constructor(address payable _insOwner) public ERC721("Elite", "code"){
+      insOwner = _insOwner;
+   }
  
     function addProduct(uint _productId, string memory _productName, uint _price ) public {
-         productIndex[msg.sender];
-         Product memory newProduct= Product(_productId, _productName, _price,true);
-         productIndex[productCounter++]= newProduct;
-            
-    }
-    
-    
-    function changeFalse(uint _productIndex) public view  {
-        require(msg.sender == insOwner, "the Product is offered");
-         productIndex[_productIndex].offered = false;
-        
+        productCounter++;
+        Product memory newProduct =Product(_productId, _productName, _price, true);
+        productIndex[productCounter++] = newProduct;
        
         
+ 
     }
     
-    function changeTrue(uint _productIndex) public view  {
-         require(msg.sender != insOwner, "the Product is not offered");
-         productIndex[_productIndex].offered = true;
+    
+    function doNotOffer(uint _productIndex) public returns(bool) {
+        require(msg.sender == insOwner, "I'm not offer it");
+        return productIndex[_productIndex].offered == false;
 
     }
     
-    modifier onlyOwner(uint) {
-        require(
-            msg.sender == onlyOwner,
-            "Only owner can call this function."
-        );
-    
-    function changePrice(uint _productIndex, uint _price) public onlyOwner {
-     price = _price;
-     return newPrice;
-        
+    function forOffer(uint _productIndex) public returns(bool) {
+        require(msg.sender == insOwner, "I'm offer it");
+        return productIndex[_productIndex].offered ==true;
+
+    }
+
+    function changePrice(uint _productIndex, uint _price) public view {
+        require(productIndex[_productIndex].price >= 1, "not valid index" );
+        productIndex[_productIndex].price== _price;
     }
     
-    function clientSelect(uint _productIndex) public payable {
-        require(msg.address == productIndex[_productIndex].time,"check the time"
-        productIndex[_productIndex].isValid = bool;
-    } 
+    // handling the error
+    function setPrice (uint _price) public {
+        uint price = _price;
+        require(insOwner == msg.sender, "you are not the owner");
+    }
     
-}
+    function clientSelect(uint _productIndex) public payable returns(bool) {
+        require(productIndex[_productIndex].price == msg.value, "Not appropriate" );
+        require( productIndex[_productIndex].price == 0, "Not valid index");
+        
+        Client memory newClient;
+        newClient.isValid = true;
+        newClient.time = block.number;
+        client[msg.sender][_productIndex] = newClient;
+        insOwner.transfer(msg.value);
+        
+        }
+        
+     function buyInsurance(uint _productIndex) public payable {
+        
+    } 
+        
+    } 
