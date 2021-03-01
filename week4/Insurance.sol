@@ -30,6 +30,7 @@ contract TechInsurance is ERC721 {
     
     mapping(uint => Product) public productIndex;
     mapping(address => mapping(uint => Client)) public client;
+    mapping(address => mapping(uint => Client )) public productId;
     
     uint productCounter;
     
@@ -84,6 +85,9 @@ contract TechInsurance is ERC721 {
         }
         
      function buyInsurance(uint _productIndex) public payable {
+     require(productIndex != address(0), "ERC721: productIndex");
+         
+         productIndex[_productIndex] -= price;
         
     } 
         
