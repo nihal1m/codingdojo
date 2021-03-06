@@ -24,18 +24,13 @@ contract TechInsurance is ERC721 {
 
     }
     
-
-
-    
-    
     mapping(uint => Product) public productIndex;
     mapping(address => mapping(uint => Client)) public client;
-    mapping(address => mapping(uint => Client )) public productId;
     
     uint productCounter;
     
     address payable insOwner;
-    constructor(address payable _insOwner) public ERC721("Elite", "code"){
+    constructor(address payable _insOwner) public ERC721("Elite","code"){
       insOwner = _insOwner;
    }
  
@@ -43,52 +38,47 @@ contract TechInsurance is ERC721 {
         productCounter++;
         Product memory newProduct =Product(_productId, _productName, _price, true);
         productIndex[productCounter++] = newProduct;
-       
         
- 
     }
     
-    
-    function doNotOffer(uint _productIndex) public returns(bool) {
+    function doNotOffer(uint _productIndex) public view {
         require(msg.sender == insOwner, "I'm not offer it");
-        return productIndex[_productIndex].offered == false;
-
+        productIndex[_productIndex].offered == false;
+        
     }
     
-    function forOffer(uint _productIndex) public returns(bool) {
+    function forOffer(uint _productIndex) public view   {
         require(msg.sender == insOwner, "I'm offer it");
-        return productIndex[_productIndex].offered ==true;
+        productIndex[_productIndex].offered ==true;
 
     }
 
-    function changePrice(uint _productIndex, uint _price) public view {
+    function changePrice(uint _productIndex, uint _price) public view  {
         require(productIndex[_productIndex].price >= 1, "not valid index" );
         productIndex[_productIndex].price== _price;
     }
     
     // handling the error
-    function setPrice (uint _price) public {
+    function setPrice (uint _price) public view  {
         uint price = _price;
         require(insOwner == msg.sender, "you are not the owner");
+        
     }
     
-    function clientSelect(uint _productIndex) public payable returns(bool) {
+    function buyInsurance(uint _productIndex) public payable {
         require(productIndex[_productIndex].price == msg.value, "Not appropriate" );
-        require( productIndex[_productIndex].price == 0, "Not valid index");
+        require(productIndex[_productIndex].price == 0, "Not valid index");
         
         Client memory newClient;
         newClient.isValid = true;
         newClient.time = block.number;
         client[msg.sender][_productIndex] = newClient;
-        insOwner.transfer(msg.value);
+        insOwner.transfer(msg.value); 
         
-        }
+    }
+}
+     
+    //function refund(uint productId) public returns(bool success) {
         
-     function buyInsurance(uint _productIndex) public payable {
-     require(productIndex != address(0), "ERC721: productIndex");
-         
-         productIndex[_productIndex] -= price;
-        
-    } 
-        
-    } 
+     
+    
